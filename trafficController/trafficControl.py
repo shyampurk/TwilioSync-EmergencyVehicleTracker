@@ -8,9 +8,9 @@ from mclora import MCLoRa
 from threading import Thread
 import RPi.GPIO as GPIO
 
-BLUE = 40
+BLUE = 38
 RED = 36
-GREEN = 38
+GREEN = 40
 
 def gpio_init():
 	GPIO.setwarnings(False)
@@ -114,7 +114,7 @@ def loraReceive():
 		print error 
 
 if __name__ == '__main__':
-
+	gpio_init()
 	ambulaceState.setdefault("state",0)
 	success = loraM.testOK()
 	if success:
