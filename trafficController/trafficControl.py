@@ -6,6 +6,34 @@ import sys
 import argparse
 from mclora import MCLoRa
 from threading import Thread
+import RPi.GPIO as GPIO
+
+BLUE = 40
+RED = 36
+GREEN = 38
+
+def gpio_init():
+	GPIO.setwarnings(False)
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(BLUE, GPIO.OUT)
+	GPIO.setup(RED, GPIO.OUT)
+	GPIO.setup(GREEN, GPIO.OUT)
+	set_red()
+	
+def set_red():
+	GPIO.output(BLUE, GPIO.LOW)
+	GPIO.output(RED, GPIO.HIGH)
+	GPIO.output(GREEN, GPIO.LOW)
+
+def set_green():
+	GPIO.output(BLUE, GPIO.LOW)
+	GPIO.output(RED, GPIO.LOW)
+	GPIO.output(GREEN, GPIO.HIGH)
+
+def set_yellow():
+	GPIO.output(BLUE, GPIO.HIGH)
+	GPIO.output(RED, GPIO.LOW)
+	GPIO.output(GREEN, GPIO.LOW)
 
 #
 # Use the actual location of your downloaded certificate and key.
@@ -56,12 +84,16 @@ def updateTrafficSignal():
 	state = ambulaceState["state"]
 	if state == NORMAL:
 		print "RED"
+		set_red()
 		time.sleep(1)
 		print "YELLOW"
+		set_yellow()
 		time.sleep(1)
 		print "GREEN"
+		set_green()
 		time.sleep(3)
 	elif state == CRITICAL:
+		set_green()
 		print "GREEN"
 		time.sleep(3)
 
