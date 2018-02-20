@@ -75,7 +75,7 @@ def print_message(client, userdata, msg):
     print ("Ambulace Location: ", distanceCalculated)
     if distanceCalculated >= 150:
     	ambulaceState["state"] = 0
-	updateTrafficSignal()
+	#updateTrafficSignal()
     else:
     	ambulaceState["state"] = 1
 	updateTrafficSignal()
