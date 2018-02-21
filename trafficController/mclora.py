@@ -11,11 +11,11 @@ class MCLoRa:
         """Conctructor - needs serial port string."""
         self.ser = serial.Serial(port, 57600)
 
-'''****************************************************************************************
-Function Name       :   testOK
-Description         :   Check module is working
-Parameters          :   none
-****************************************************************************************'''
+    '''****************************************************************************************
+    Function Name       :   testOK
+    Description         :   Check module is working
+    Parameters          :   none
+    ****************************************************************************************'''
     def testOK(self):
         """Tests communication with Microchip Lora Module."""
         # send:
