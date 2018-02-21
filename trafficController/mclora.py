@@ -38,11 +38,11 @@ Parameters          :   none
             else:
                 return False
 
-'''****************************************************************************************
-Function Name       :   pause
-Description         :   Pause MAC Operation and continue with radio
-Parameters          :   none
-****************************************************************************************'''       
+    '''****************************************************************************************
+    Function Name       :   pause
+    Description         :   Pause MAC Operation and continue with radio
+    Parameters          :   none
+    ****************************************************************************************'''       
     def pause(self):
         """Pauses LoRaWAN stack."""
         self.ser.write('mac resume\r\n'.encode())
@@ -50,11 +50,11 @@ Parameters          :   none
         self.ser.write('mac pause\r\n'.encode())
         val = self.ser.readline().decode()
         return val
-'''****************************************************************************************
-Function Name       :   recv
-Description         :   Receive Data over LoRa
-Parameters          :   none
-****************************************************************************************'''
+    '''****************************************************************************************
+    Function Name       :   recv
+    Description         :   Receive Data over LoRa
+    Parameters          :   none
+    ****************************************************************************************'''
     def recv(self):
         """Waits for data. This call will block. 
         """
@@ -66,17 +66,17 @@ Parameters          :   none
         if val == 'ok':
             data = self.ser.readline().split()
             print(data)
-            # expected:
-            # radio_rx <data>
-            if data[0] == 'radio_rx':
-                data = data[1]
+        # expected:
+        # radio_rx <data>
+        if data[0] == 'radio_rx':
+            data = data[1]
         return data
 
-'''****************************************************************************************
-Function Name       :   getUniqueID
-Description         :   Obtain the Unique ID
-Parameters          :   none
-****************************************************************************************'''
+    '''****************************************************************************************
+    Function Name       :   getUniqueID
+    Description         :   Obtain the Unique ID
+    Parameters          :   none
+    ****************************************************************************************'''
     def getUniqueID(self):
         """Get globally unique number provided by Microchip.
         """
@@ -87,11 +87,11 @@ Parameters          :   none
         id = self.ser.readline().decode().strip()
         return id
 
-'''****************************************************************************************
-Function Name       :   send
-Description         :   Send the data over LoRa 
-Parameters          :   none
-****************************************************************************************'''
+    '''****************************************************************************************
+    Function Name       :   send
+    Description         :   Send the data over LoRa 
+    Parameters          :   none
+    ****************************************************************************************'''
     def send(self):
         """Waits for data. This call will block. 
         """
@@ -103,8 +103,8 @@ Parameters          :   none
         if val == 'ok':
             data = self.ser.readline().split()
             print(data)
-            if data[0] == 'radio_tx_ok':
-                data = data[0]
+        if data[0] == 'radio_tx_ok':
+            data = data[0]
         return data
 
 #End of the Script 
