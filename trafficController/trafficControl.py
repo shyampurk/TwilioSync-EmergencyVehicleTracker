@@ -1,3 +1,4 @@
+#Import the Modules Required
 from threading import Thread
 import paho.mqtt.client as mqtt
 import time
@@ -8,17 +9,19 @@ import argparse
 from mclora import MCLoRa
 import RPi.GPIO as GPIO
 
-BLUE = 38
-RED = 36
-GREEN = 40
-
 #
 # Use the actual location of your downloaded certificate and key.
 #
 pem_location = 'CYc9531991ff3c4f3db6e35993fa80066d.pem'
 key_location = 'CYc9531991ff3c4f3db6e35993fa80066d.key.decrypted'
 
+#Traffic Signal Location
 TRAFFIC_SIGNAL = (37.754512, -122.402560)
+
+#LED Pins
+BLUE = 38
+RED = 36
+GREEN = 40
 
 #Traffic Related 
 NORMAL = 0
@@ -26,9 +29,16 @@ CRITICAL = 1
 
 ambulaceState = dict();
 gpsLocation = [0]*2;
+
+#Variables
 port = " "
 loraM = " "
 
+'''****************************************************************************************
+Function Name 		:	obtain_port
+Description			:	Obtain the Serial Port from argument 
+Parameters 			:	none
+****************************************************************************************'''
 def obtain_port():
 	global port
 	#obtain the Port from the Argument 
@@ -39,6 +49,11 @@ def obtain_port():
 	if args.serial_port:
 		port = args.serial_port
 
+'''****************************************************************************************
+Function Name 		:	gpio_init
+Description			:	Initiazie the GPIO Pins for the Traffic Control
+Parameters 			:	none
+****************************************************************************************'''
 def gpio_init():
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
@@ -47,21 +62,44 @@ def gpio_init():
     GPIO.setup(GREEN, GPIO.OUT)
     set_red()
 
+'''****************************************************************************************
+Function Name 		:	set_red
+Description			:	Switch to Red Signal
+Parameters 			:	none
+****************************************************************************************'''
 def set_red():
     GPIO.output(BLUE, GPIO.LOW)
     GPIO.output(RED, GPIO.HIGH)
     GPIO.output(GREEN, GPIO.LOW)
 
+'''****************************************************************************************
+Function Name 		:	set_green
+Description			:	Switch to Green Signal
+Parameters 			:	none
+****************************************************************************************'''
 def set_green():
     GPIO.output(BLUE, GPIO.LOW)
     GPIO.output(RED, GPIO.LOW)
     GPIO.output(GREEN, GPIO.HIGH)
 
+'''****************************************************************************************
+Function Name 		:	set_yellow
+Description			:	Swtich to Yellow Signal 
+Parameters 			:	none
+****************************************************************************************'''
 def set_yellow():
     GPIO.output(BLUE, GPIO.HIGH)
     GPIO.output(RED, GPIO.LOW)
     GPIO.output(GREEN, GPIO.LOW)
 
+'''****************************************************************************************
+Function Name 		:	on_message
+Description			:	Subscribed to Twilio Channel
+Parameters 			:	client 		- Twilio Client
+						userdata 	- userdata related to device
+						msg 		- Payload received
+
+****************************************************************************************'''
 def on_message(client, userdata, msg):
 	print(msg.topic + ' ' + str(msg.payload))
 	dataReceived = json.loads(msg.payload)
@@ -75,12 +113,17 @@ def on_message(client, userdata, msg):
 	else:
 		ambulaceState["state"] = 1
 
+'''****************************************************************************************
+Function Name 		:	updateTrafficSignal
+Description			:	Updates the Signal Status
+Parameters 			:	none
+****************************************************************************************'''
 def updateTrafficSignal():
     state = ambulaceState["state"]
     if state == NORMAL:
         print "RED"
         set_red()
-        time.sleep(1)
+        time.sleep(2)
         print "YELLOW"
         set_yellow()
         time.sleep(1)
@@ -92,10 +135,11 @@ def updateTrafficSignal():
         print "GREEN"
         time.sleep(3)
 
-def signalUpdate():
-    while True:
-        updateTrafficSignal()
-
+'''****************************************************************************************
+Function Name 		:	loraReceive
+Description			:	Receives the LoRa Data
+Parameters 			:	none
+****************************************************************************************'''
 def loraReceive():
 	global loraM
 	count  = 0
@@ -112,11 +156,17 @@ def loraReceive():
 	except Exception as error:
 		print error 
 
+'''****************************************************************************************
+Function Name 		:	systemInit
+Description			:	Initiazie the LoRa and Twilio Client 
+Parameters 			:	None
+****************************************************************************************'''
 def systemInit():
 	global port, loraM, client
 	obtain_port()
 	gpio_init()
 	ambulaceState.setdefault("state",0)
+	
 	#loraM handles all the loraEvents 
 	loraM = MCLoRa(port)
 	success = loraM.testOK()
@@ -141,16 +191,16 @@ def systemInit():
 
 if __name__ == "__main__":
     systemInit()
-    t1 = Thread(target = signalUpdate)
-    t2 = Thread(target = loraReceive)
-    t1.setDaemon(True)
-    t2.setDaemon(True)
-    t1.start()
-    t2.start()
+    loraThread = Thread(target = loraReceive)
+    loraThread.setDaemon(True)
+    loraThread.start()
     while True:
         try:
-            pass
+            updateTrafficSignal()
         except KeyboardInterrupt:
-            t1.stop()
-            t2.stop()
+            loraThread.stop()
             sys.exit(0)
+
+
+#End of the Script 
+##*****************************************************************************************************##

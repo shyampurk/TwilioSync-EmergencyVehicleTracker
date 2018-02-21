@@ -1,21 +1,21 @@
-"""
-mclora.py
-
-Description:
-
-Communicate with RN2483/RN2903 over serial port.
-
-Author: Mahesh Venkitachalam
-Website: electronut.in
-
-"""
+#LoRa Serial Handle - Send Commands and Handle the response
+#Import the Modules Required
 import serial
 
+'''****************************************************************************************
+Class Name          :   MCLoRa
+Description         :   Handle LoRa Events
+****************************************************************************************'''
 class MCLoRa:
     def __init__(self, port):
         """Conctructor - needs serial port string."""
         self.ser = serial.Serial(port, 57600)
 
+'''****************************************************************************************
+Function Name       :   testOK
+Description         :   Check module is working
+Parameters          :   none
+****************************************************************************************'''
     def testOK(self):
         """Tests communication with Microchip Lora Module."""
         # send:
@@ -31,7 +31,6 @@ class MCLoRa:
                 return False
         except Exception as error:
             print error
-            self.ser.write("mac resume\r\n".encode())
             self.ser.write("sys get ver\r\n".encode())
             s = self.ser.readline().decode().split()
             if s[0] == 'RN2483':
@@ -39,15 +38,23 @@ class MCLoRa:
             else:
                 return False
 
-        
+'''****************************************************************************************
+Function Name       :   pause
+Description         :   Pause MAC Operation and continue with radio
+Parameters          :   none
+****************************************************************************************'''       
     def pause(self):
         """Pauses LoRaWAN stack."""
+        self.ser.write('mac resume\r\n'.encode())
+        val = self.ser.readline().decode()
         self.ser.write('mac pause\r\n'.encode())
         val = self.ser.readline().decode()
-        print val
         return val
-
-    # separate thread?
+'''****************************************************************************************
+Function Name       :   recv
+Description         :   Receive Data over LoRa
+Parameters          :   none
+****************************************************************************************'''
     def recv(self):
         """Waits for data. This call will block. 
         """
@@ -65,6 +72,11 @@ class MCLoRa:
                 data = data[1]
         return data
 
+'''****************************************************************************************
+Function Name       :   getUniqueID
+Description         :   Obtain the Unique ID
+Parameters          :   none
+****************************************************************************************'''
     def getUniqueID(self):
         """Get globally unique number provided by Microchip.
         """
@@ -74,7 +86,12 @@ class MCLoRa:
         self.ser.write('sys get hweui\r\n'.encode())
         id = self.ser.readline().decode().strip()
         return id
-        # separate thread?
+
+'''****************************************************************************************
+Function Name       :   send
+Description         :   Send the data over LoRa 
+Parameters          :   none
+****************************************************************************************'''
     def send(self):
         """Waits for data. This call will block. 
         """
@@ -89,3 +106,6 @@ class MCLoRa:
             if data[0] == 'radio_tx_ok':
                 data = data[0]
         return data
+
+#End of the Script 
+##*****************************************************************************************************##
