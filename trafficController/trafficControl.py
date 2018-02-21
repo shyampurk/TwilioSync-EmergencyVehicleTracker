@@ -198,7 +198,6 @@ if __name__ == "__main__":
         try:
             updateTrafficSignal()
         except KeyboardInterrupt:
-            loraThread.stop()
             sys.exit(0)
 
 
