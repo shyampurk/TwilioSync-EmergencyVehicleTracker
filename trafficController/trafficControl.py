@@ -19,7 +19,7 @@ key_location = 'CYc9531991ff3c4f3db6e35993fa80066d.key.decrypted'
 TRAFFIC_SIGNAL = (37.754512, -122.402560)
 
 #LED Pins
-BLUE = 38
+YELLOW = 38
 RED = 36
 GREEN = 40
 
@@ -57,7 +57,7 @@ Parameters 			:	none
 def gpio_init():
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(BLUE, GPIO.OUT)
+    GPIO.setup(YELLOW, GPIO.OUT)
     GPIO.setup(RED, GPIO.OUT)
     GPIO.setup(GREEN, GPIO.OUT)
     set_red()
@@ -68,7 +68,7 @@ Description			:	Switch to Red Signal
 Parameters 			:	none
 ****************************************************************************************'''
 def set_red():
-    GPIO.output(BLUE, GPIO.LOW)
+    GPIO.output(YELLOW, GPIO.LOW)
     GPIO.output(RED, GPIO.HIGH)
     GPIO.output(GREEN, GPIO.LOW)
 
@@ -78,7 +78,7 @@ Description			:	Switch to Green Signal
 Parameters 			:	none
 ****************************************************************************************'''
 def set_green():
-    GPIO.output(BLUE, GPIO.LOW)
+    GPIO.output(YELLOW, GPIO.LOW)
     GPIO.output(RED, GPIO.LOW)
     GPIO.output(GREEN, GPIO.HIGH)
 
@@ -88,19 +88,19 @@ Description			:	Swtich to Yellow Signal
 Parameters 			:	none
 ****************************************************************************************'''
 def set_yellow():
-    GPIO.output(BLUE, GPIO.HIGH)
+    GPIO.output(YELLOW, GPIO.HIGH)
     GPIO.output(RED, GPIO.LOW)
     GPIO.output(GREEN, GPIO.LOW)
 
 '''****************************************************************************************
-Function Name 		:	on_message
+Function Name 		:	handleEmergencyMessage
 Description			:	Subscribed to Twilio Channel
 Parameters 			:	client 		- Twilio Client
 						userdata 	- userdata related to device
 						msg 		- Payload received
 
 ****************************************************************************************'''
-def on_message(client, userdata, msg):
+def handleEmergencyMessage(client, userdata, msg):
 	print(msg.topic + ' ' + str(msg.payload))
 	dataReceived = json.loads(msg.payload)
 	gpsLocation[0] = dataReceived["lat"]
@@ -180,7 +180,7 @@ def systemInit():
 	#Twilio Client 	
 	client = mqtt.Client(client_id="rpi", clean_session=False)
 	client.tls_set(None, pem_location, key_location)
-	client.on_message = on_message
+	client.on_message = handleEmergencyMessage
     
     #
     # Use qos=1 to get your device caught up right away.
