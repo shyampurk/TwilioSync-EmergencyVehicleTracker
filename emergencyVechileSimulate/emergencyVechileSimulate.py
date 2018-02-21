@@ -11,9 +11,9 @@ from mclora import MCLoRa
 import serial
 
 # Your Account Sid and Auth Token from twilio.com/user/account
-account_sid = "AC18af524b5da6e4429e4c5875e2fdd7cd"
-auth_token = "4ee302404ec79b0622eae81ff717e534"
-deviceID = "ISd136efcec806480a96570a44a4b942af"
+ACCOUNT_SID = "AC18af524b5da6e4429e4c5875e2fdd7cd"
+AUTH_TOKEN = "4ee302404ec79b0622eae81ff717e534"
+SERVICE_SID = "ISd136efcec806480a96570a44a4b942af"
 
 #Variables
 loraM = " "
@@ -63,7 +63,7 @@ def  sys_init():
 	obtain_port()
 
 	#Twilio Client Initilize 
-	client = Client(account_sid, auth_token)
+	client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 	# LoRa module Initialze on the given Port
 	loraM = MCLoRa(port)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 				gps_Data["lon"] = ambulance_list[i][1]
 				try:
 					document = client.sync \
-					    .services(deviceID) \
+					    .services(SERVICE_SID) \
 					    .documents("gpsData") \
 					    .update(data=gps_Data)
 					print("Location Updated: ", document.data)
