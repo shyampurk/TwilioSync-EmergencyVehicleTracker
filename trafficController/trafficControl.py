@@ -144,9 +144,9 @@ def updateTrafficSignal():
 			print "Switching to GREEN\n"	
 			set_green()
 
-	time.sleep(trafficLightNormalCycleTime[trafficLightNormalCurrState])
+		time.sleep(trafficLightNormalCycleTime[trafficLightNormalCurrState])
 
-	trafficLightNormalCurrState = trafficLightNormalCycle[ (trafficLightNormalCurrState + 1) % 3]
+		trafficLightNormalCurrState = trafficLightNormalCycle[ (trafficLightNormalCurrState + 1) % 3]
 
 	elif state == CRITICAL:
 		set_green()
