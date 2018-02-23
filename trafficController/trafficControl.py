@@ -163,18 +163,21 @@ Parameters 			:	none
 def loraReceive():
 	global loraM
 	count  = 0
-	try:
-		data = loraM.recv()
-		if data == "01": #Code 01 indicates primary communication failure
-			emergencyVehicleState["state"] = 1
-			count = 0
-		else:
-			count = count + 1
-			if count == 20:
-				count  = 0
-				emergencyVehicleState["state"] = 0
-	except Exception as error:
-		print error 
+	while True:
+		print "LoRa Packet Receive Start"
+		try:
+			data = str(loraM.recv())
+			if data == "01": #Code 01 indicates primary communication failure
+				print "Received LoRa Signal from Emergeny Vehicle"
+				emergencyVehicleState["state"] = 1
+				count = 0
+			else:
+				count = count + 1
+				if count == 20:
+					count  = 0
+					emergencyVehicleState["state"] = 0
+		except Exception as error:
+			print error 
 
 '''****************************************************************************************
 Function Name 		:	systemInit
