@@ -23,14 +23,24 @@ YELLOW = 38
 RED = 36
 GREEN = 40
 
-#Traffic Related 
+#Traffic State Related 
 NORMAL = 0
 CRITICAL = 1
 
-ambulaceState = dict();
+#Traffic Light Related
+LIGHT_RED = 0
+LIGHT_YELLOW = 1
+LIGHT_GREEN = 2
+
+#System States and COnsts
+emergencyVehicleState = dict();
 gpsLocation = [0]*2;
 
-#Variables
+trafficLightNormalCurrState = LIGHT_RED
+trafficLightNormalCycle = [ LIGHT_RED , LIGHT_YELLOW , LIGHT_GREEN]
+trafficLightNormalCycleTime = [2, 1, 3]
+
+#System Variables
 port = " "
 loraM = " "
 
@@ -107,11 +117,12 @@ def handleEmergencyMessage(client, userdata, msg):
 	gpsLocation[1] = dataReceived["lon"]
 	gps_tuple = tuple(gpsLocation)
 	distanceCalculated = int(vincenty(TRAFFIC_SIGNAL, gps_tuple).meters)
-	print ("Ambulace Location: ", distanceCalculated)
+	print ("Emergency Vehicle Location: ", distanceCalculated)
 	if distanceCalculated >= 150:
-		ambulaceState["state"] = 0
+		emergencyVehicleState["state"] = 0
+		trafficLightNormalCurrState = LIGHT_RED
 	else:
-		ambulaceState["state"] = 1
+		emergencyVehicleState["state"] = 1
 
 '''****************************************************************************************
 Function Name 		:	updateTrafficSignal
@@ -119,20 +130,28 @@ Description			:	Updates the Signal Status
 Parameters 			:	none
 ****************************************************************************************'''
 def updateTrafficSignal():
-    state = ambulaceState["state"]
+    state = emergencyVehicleState["state"]
     if state == NORMAL:
-        print "RED"
-        set_red()
-        time.sleep(2)
-        print "YELLOW"
-        set_yellow()
-        time.sleep(1)
-        print "GREEN"
-        set_green()
-        time.sleep(3)
+        
+    	if (LIGHT_RED == trafficLightNormalCurrState):
+    		print "Switching to RED\n"	
+    		set_red()
+        elif (LIGHT_YELLOW == trafficLightNormalCurrState):
+        	print "Switching to YELLOW\n"	
+    		set_yellow()
+    	elif (LIGHT_GREEN == trafficLightNormalCurrState):
+        	print "Switching to GREEN\n"	
+    		set_green()
+        
+        time.sleep(trafficLightNormalCycleTime[trafficLightNormalCurrState])
+        
+        trafficLightNormalCurrState = trafficLightNormalCycle[ (trafficLightNormalCurrState + 1) % 3]
+
     elif state == CRITICAL:
         set_green()
-        print "GREEN"
+        print "Detected Critical Distance from Emergency Vehicle\n"
+        
+        print "Switching to GREEN and Hold\n"
         time.sleep(3)
 
 '''****************************************************************************************
@@ -145,14 +164,14 @@ def loraReceive():
 	count  = 0
 	try:
 		data = loraM.recv()
-		if data == "01":
-			ambulaceState["state"] = 1
+		if data == "01": #Code 01 indicates primary communication failure
+			emergencyVehicleState["state"] = 1
 			count = 0
 		else:
 			count = count + 1
 			if count == 20:
 				count  = 0
-				ambulaceState["state"] = 0
+				emergencyVehicleState["state"] = 0
 	except Exception as error:
 		print error 
 
@@ -165,16 +184,16 @@ def systemInit():
 	global port, loraM, client
 	obtain_port()
 	gpio_init()
-	ambulaceState.setdefault("state",0)
+	emergencyVehicleState.setdefault("state",0)
 	
 	#loraM handles all the loraEvents 
 	loraM = MCLoRa(port)
 	success = loraM.testOK()
 	if success:
-		print "Gateway Init Success"
+		print "Traffic Controller Gateway Init Success"
 		print (success)
 	else:
-		print("Unable to connect to LoRa")
+		print("Traffic Controller Gateway Init FAILURE")
 	loraM.pause()
 
 	#Twilio Client 	
@@ -194,6 +213,9 @@ if __name__ == "__main__":
     loraThread = Thread(target = loraReceive)
     loraThread.setDaemon(True)
     loraThread.start()
+
+    print("Traffic Controller Started\n")
+
     while True:
         try:
             updateTrafficSignal()
