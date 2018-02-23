@@ -84,7 +84,9 @@ if __name__ == '__main__':
 	print("Emergency Vehicle Starting\n")
 
 	while True:
-		try:		
+		try:
+			print "Emergency Vehicle Trip Start\n"
+			
 			for i in range(len(location_list)):
 
 				#Frame the document based on current timestamp and current location 
@@ -114,6 +116,7 @@ if __name__ == '__main__':
 
 				time.sleep(3)
 			time.sleep(5)
+			print "Emergency Vehicle Trip End\n"
 		except KeyboardInterrupt:
 			print "Exiting ..."
 			sys.exit(0)
