@@ -132,28 +132,28 @@ Parameters 			:	none
 def updateTrafficSignal():
 	global trafficLightNormalCurrState
 	state = emergencyVehicleState["state"]
-    if state == NORMAL:
-        
-    	if (LIGHT_RED == trafficLightNormalCurrState):
-    		print "Switching to RED\n"	
-    		set_red()
-        elif (LIGHT_YELLOW == trafficLightNormalCurrState):
-        	print "Switching to YELLOW\n"	
-    		set_yellow()
-    	elif (LIGHT_GREEN == trafficLightNormalCurrState):
-        	print "Switching to GREEN\n"	
-    		set_green()
-        
-        time.sleep(trafficLightNormalCycleTime[trafficLightNormalCurrState])
-        
-        trafficLightNormalCurrState = trafficLightNormalCycle[ (trafficLightNormalCurrState + 1) % 3]
+	if state == NORMAL:
 
-    elif state == CRITICAL:
-        set_green()
-        print "Detected Critical Distance from Emergency Vehicle\n"
-        
-        print "Switching to GREEN and Hold\n"
-        time.sleep(3)
+		if (LIGHT_RED == trafficLightNormalCurrState):
+			print "Switching to RED\n"	
+			set_red()
+		elif (LIGHT_YELLOW == trafficLightNormalCurrState):
+			print "Switching to YELLOW\n"	
+			set_yellow()
+		elif (LIGHT_GREEN == trafficLightNormalCurrState):
+			print "Switching to GREEN\n"	
+			set_green()
+
+	time.sleep(trafficLightNormalCycleTime[trafficLightNormalCurrState])
+
+	trafficLightNormalCurrState = trafficLightNormalCycle[ (trafficLightNormalCurrState + 1) % 3]
+
+	elif state == CRITICAL:
+		set_green()
+		print "Detected Critical Distance from Emergency Vehicle\n"
+
+		print "Switching to GREEN and Hold\n"
+		time.sleep(3)
 
 '''****************************************************************************************
 Function Name 		:	loraReceive
