@@ -131,7 +131,7 @@ Parameters 			:	none
 ****************************************************************************************'''
 def updateTrafficSignal():
 	global trafficLightNormalCurrState
-    state = emergencyVehicleState["state"]
+	state = emergencyVehicleState["state"]
     if state == NORMAL:
         
     	if (LIGHT_RED == trafficLightNormalCurrState):
