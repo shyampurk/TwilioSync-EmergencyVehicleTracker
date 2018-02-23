@@ -130,6 +130,7 @@ Description			:	Updates the Signal Status
 Parameters 			:	none
 ****************************************************************************************'''
 def updateTrafficSignal():
+	global trafficLightNormalCurrState
     state = emergencyVehicleState["state"]
     if state == NORMAL:
         

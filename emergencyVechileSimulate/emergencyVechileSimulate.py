@@ -88,7 +88,7 @@ if __name__ == '__main__':
 			for i in range(len(location_list)):
 
 				#Frame the document based on current timestamp and current location 
-				gps_Data[date_updated] = str(datetime.now())
+				gps_Data["date_updated"] = str(datetime.now())
 				gps_Data["lat"] = location_list[i][0]
 				gps_Data["lon"] = location_list[i][1]
 				
