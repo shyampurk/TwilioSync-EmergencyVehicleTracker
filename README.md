@@ -58,7 +58,56 @@ To enable a backup direct connectivity in the case of internet connection failur
 
 <img src=screenshots/pic-4.jpg>
 
-You will have to connect it to a USB to serial convertor so that it can be plugged in to Raspberry Pi3 and a computer. You will need two of these, one each for the traffic signal (Raspberry Pi3) and the emergency vehicle (computer).
+You will have to connect it to a USB to serial converter so that it can be plugged in to Raspberry Pi3 and a computer. You will need two of these, one each for the traffic signal (Raspberry Pi3) and the emergency vehicle (computer).
 
 <img src=screenshots/pic-5.jpg>
 
+
+
+## Software program to control traffic signal
+
+The Raspberry Pi3 setup acts as the traffic signal. It will exhibit the usual red, yellow, green cycle just like a real world traffic signal. But it is programmed in a way that it is aware of the emergency vehicle's proximity so that at a certain minimum distance it will set to green till the emergency vehicle clears past that distance.  
+
+All of this is handled by [this python script](trafficController/trafficControl.py)
+
+Here are the steps to configure and run this script. But before that, make sure that the Raspberry Pi3 is setup with teh LEDs..
+
+### Step 0 : DEPENDENCIES - you need to install the following python libraries that the traffic signal script relies upon
+
+      pip install paho-mqtt
+      pip install pyserial
+
+### Step 1 : Clone this repo in the Raspberry Pi 3
+
+### Step 2 : Copy the keys 
+
+You must copy the keys (.pem & .key.decrypted) in the same location as the script.  
+
+### Step 3 : Modify the traffic signal script  
+
+Navigate to the script file [trafficController/trafficControl.py](trafficController/trafficControl.py) and update the key file names in line 15 & 16.
+
+### Step 4 : Connect the RN2483 LoRa Module
+
+Plug in the LoRa module in one of the USB ports of Raspberry Pi3
+
+### Step 5 : Identify the device file for the LoRa Module
+
+Run the command "dmesg" to display a list of device files under /dev. Look for the most recent file which has the following pattern
+
+        /dev/ttyUSBx
+
+### Step 6 : Run the traffic signal script
+
+Run the script by invoking the following command
+
+        sudo python trafficControl.py --port /dev/ttyUSBx
+  
+
+If eveything went well, then you can see the traffic signal toggling between the three signal colors. 
+
+## Software program to simulate emergency vehicle movement
+
+As the final task, you need to setup a simulated movement of an emergency vehicle along a pre-defined route. This route intersects the traffic signal and the signal exhibits an all green state when the vehicle is in close proximity to it.
+
+### Step 1 : 
