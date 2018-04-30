@@ -58,7 +58,7 @@ To enable a backup direct connectivity in the case of internet connection failur
 
 <img src=screenshots/pic-4.jpg>
 
-You will have to connect it to a serial to USB convertor so that it cna be plugged in to Raspberry Pi and a computer. You will need two of these, one each for the traffic signal (Raspberry Pi3) and the emergency vehicle (computer).
+You will have to connect it to a USB to serial convertor so that it can be plugged in to Raspberry Pi3 and a computer. You will need two of these, one each for the traffic signal (Raspberry Pi3) and the emergency vehicle (computer).
 
 <img src=screenshots/pic-5.jpg>
 
