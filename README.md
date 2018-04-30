@@ -41,7 +41,22 @@ https://www.twilio.com/docs/quickstart/sync-iot/python-mqtt-quickstart#create-a-
 
 Note Down the Service SID and download the certificates
 
-In the end you will need these three credential emelents from Twilio to be configured in the software
+In the end you will need these three credential elements from Twilio to be configured in the software
 1. Account SID
 2. AUTH Token
 3. Service SID
+
+## Raspberry Pi 3 Hardware
+
+Raspberry Pi 3 is used to emulate the traffic signal. You will also need three LEDs ( Red, Yellow and Green) and three pull up resistors to connect to the Raspberry Pi and make a functional setup on a traffic signal
+
+<img src=screenshots/pic-3.jpg>
+
+## Microship RN 2483 LoRa module
+
+To enable a backup direct connectivity in the case of internet connection failure, you need to use a LoRa chip. We have used the Microchip RN 2483 module with a serial to USB convertor. You will need two of these, one each for the traffic signal and the emergency vehicle.
+
+<img src=screenshots/pic-4.jpg>
+
+<img src=screenshots/pic-5.jpg>
+
