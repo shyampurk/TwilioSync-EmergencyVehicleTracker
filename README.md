@@ -127,7 +127,9 @@ Before you can execute this script on a computer, perform the following steps. T
 Navigate to the script file [emergencyVechileSimulate/emergencyVechileSimulate.py](emergencyVechileSimulate/emergencyVechileSimulate.py) and update the line 14, 15 & 16 with your Twilio credentials as follows
 
  Line 14 : ACCOUNT_SID - Update your ACCOUNT_SID obrained from Twilio
+ 
  Line 15 : AUTH_TOKEN  - Update your AUTH_TOKEN obrained from Twilio
+ 
  Line 16 : SERVICE_SID  - Update your SERVICE_SID obrained from Twilio
  
  Refer step 3 under "Twilio Subscription" section above to get your Twilio credentials. 
