@@ -46,7 +46,7 @@ In the end you will need these three credential elements from Twilio to be confi
 2. AUTH Token
 3. Service SID
 
-## Raspberry Pi 3 Hardware
+## Raspberry Pi 3 Hardware Setup
 
 Raspberry Pi 3 is used to emulate the traffic signal. You will also need three LEDs ( Red, Yellow and Green) and three pull up resistors to connect to the Raspberry Pi and make a functional setup on a traffic signal
 
