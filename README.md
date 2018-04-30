@@ -50,13 +50,15 @@ In the end you will need these three credential elements from Twilio to be confi
 
 Raspberry Pi 3 is used to emulate the traffic signal. You will also need three LEDs ( Red, Yellow and Green) and three pull up resistors to connect to the Raspberry Pi and make a functional setup on a traffic signal
 
-<img src=screenshots/pic-3.jpg>
+<img src=screenshots/pic-3.jpg width=400>
 
 ## Microship RN 2483 LoRa module
 
-To enable a backup direct connectivity in the case of internet connection failure, you need to use a LoRa chip. We have used the Microchip RN 2483 module with a serial to USB convertor. You will need two of these, one each for the traffic signal and the emergency vehicle.
+To enable a backup direct connectivity in the case of internet connection failure, you need to use a LoRa chip. We have used the Microchip RN 2483 module for this project.
 
 <img src=screenshots/pic-4.jpg>
+
+You will have to connect it to a serial to USB convertor so that it cna be plugged in to Raspberry Pi and a computer. You will need two of these, one each for the traffic signal (Raspberry Pi3) and the emergency vehicle (computer).
 
 <img src=screenshots/pic-5.jpg>
 
