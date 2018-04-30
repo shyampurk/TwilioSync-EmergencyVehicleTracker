@@ -39,9 +39,9 @@ You need to create a device so that a Twilio Sync instance is associated with it
 Follow the link to obtain Device Service SID and TLS certificates,
 https://www.twilio.com/docs/quickstart/sync-iot/python-mqtt-quickstart#create-a-sync-document
 
-Note Down the Service SID and download the certificates
+Note Down the Twilio credentials and download the certificates
 
-In the end you will need these three credential elements from Twilio to be configured in the software
+In the end you will need these three credential elements from Twilio to be configured in the software later (explained below)
 1. Account SID
 2. AUTH Token
 3. Service SID
@@ -79,9 +79,9 @@ Here are the steps to configure and run this script. But before that, make sure 
 
 ### Step 1 : Clone this repo in the Raspberry Pi 3
 
-### Step 2 : Copy the keys 
+### Step 2 : Copy the files 
 
-You must copy the keys (.pem & .key.decrypted) in the same location as the script.  
+You must copy the certificate and key files (.pem & .key.decrypted) in the same location as the script.  Refer step 3 under "Twilio Subscription" section above. 
 
 ### Step 3 : Modify the traffic signal script  
 
@@ -110,4 +110,42 @@ If eveything went well, then you can see the traffic signal toggling between the
 
 As the final task, you need to setup a simulated movement of an emergency vehicle along a pre-defined route. This route intersects the traffic signal and the signal exhibits an all green state when the vehicle is in close proximity to it.
 
-### Step 1 : 
+The emergency vehicle movement is simulated by [this python script](emergencyVechileSimulate/emergencyVechileSimulate.py)
+
+Before you can execute this script on a computer, perform the following steps. The steps below are shown for a Windows based PC/laptop with pre installed python 2.7 runtime environment.
+
+
+### Step 0 : DEPENDENCIES - You need to install the following python libraries that the emergency vehicle script relies upon
+
+      pip install twilio
+      pip install pyserial
+
+### Step 1 : Clone this repo in the computer
+
+### Step 2 : Modify the emergency vehicle script
+
+Navigate to the script file [emergencyVechileSimulate/emergencyVechileSimulate.py](emergencyVechileSimulate/emergencyVechileSimulate.py) and update the line 14, 15 & 16 with your Twilio credentials as follows
+
+ Line 14 : ACCOUNT_SID - Update your ACCOUNT_SID obrained from Twilio
+ Line 15 : AUTH_TOKEN  - Update your AUTH_TOKEN obrained from Twilio
+ Line 16 : SERVICE_SID  - Update your SERVICE_SID obrained from Twilio
+ 
+ Refer step 3 under "Twilio Subscription" section above to get your Twilio credentials. 
+
+### Step 4 : Connect the RN2483 LoRa Module
+
+Connect the LoRa module to one of the available USB slots on the computer
+
+### Step 5 : Identify the COM port for communicating with the LoRa module
+
+Open the Device Manager under Windows Control Panel and identify the COMx port that is mapped to the newly attached USN to serial converter for the LoRa module. 
+
+### Step 6 : Run the emergency vehicle simulation
+
+Run the script from command prompt ( assuming that you are in the correct sub directory)
+
+      python emergencyVechileSimulate.py --port COMx
+      
+This will start the simulation and the GPS location of emergency vehicle along the route will be published at frequent intervals.
+
+
