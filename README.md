@@ -4,7 +4,7 @@ A model application to simulate the control of traffic signal for ensuring prior
 
 
 ## Introduction
-This is the accompanying source code for the Twilio Sync demonstration for controlling a traffic signal for ensuring priority movement of emergency vehicles within the city. In this demo we have used a raspberry pi 3 as the traffic signal and the emergency vehicle movement is simulated through a script. Twilio sync enables the state and information orchestration between the traffic signal and emergency vehicle.
+This is the accompanying source code for the [Twilio Sync demonstration](https://www.twilio.com/blog/2018/06/intelligent-transportation-lora-mqtt-twilio-sync-python.html) for controlling a traffic signal for ensuring priority movement of emergency vehicles within the city. In this demo we have used a raspberry pi 3 as the traffic signal and the emergency vehicle movement is simulated through a script. Twilio sync enables the state and information orchestration between the traffic signal and emergency vehicle.
 
 ## What You Will Need
 
